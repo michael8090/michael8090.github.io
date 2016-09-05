@@ -4,13 +4,20 @@ title:  "create services with upstate on linux"
 date:   2016-09-06 01:24:00 +0800
 tags: linux misc memo
 ---
-Create `myservice.conf` under `/etc/init.d`, with the following content
+Create `myservice.conf` under `/etc/init`, with the following content
 
-{% highlight bash %}
+```bash
 # the blog service
 start on filesystem
 script
         cd /public/www
         npm start --production
 end script
-{% endhighlight %}
+```
+
+
+Add a link to `init.d` to allow auto complete for that service:
+
+```bash
+ln -s /etc/init/myservice.conf /etc/init.d/myservice
+```
