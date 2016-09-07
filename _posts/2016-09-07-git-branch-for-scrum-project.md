@@ -63,7 +63,7 @@ tags: misc git scrum
 3. QE认为feature已经满足上线需求后，SE将feature合并回develop分支，QE在develop上做集成测试（在此期间可以自由的从develop merge到feature，但不要随意将feature merge 到 develop）
 4. 根据在集成测试环境里是否测出了集成测试issue，分如下两种情况
   1. 没有集成测试issue，feature开发完成
-  2. 在集成测试环境（假设建立在commit #CI_COMMIT上）里发现了集成测试issue，SE将#CI_COMMIT为merge回feature分支，在上面继续做开发，重复3和4。这里根据是否能在当前sprint结束之前完成bug fix又分为两种情况：
+  2. 在集成测试环境（假设建立在commit #CI_COMMIT上）里发现了集成测试issue，SE将#CI_COMMIT merge回feature分支，在上面继续做开发，重复3和4。这里根据是否能在当前sprint结束之前完成bug fix又分为两种情况：
     1. 能够在sprint结束前完成bug fix，则feature开发完成
     2. 不能及时完成bug fix，则需要**回滚当前feature在develop branch上的所有merge commit**，同时在任务里标记当前feature推迟到下一个sprint
 5. 将develop merge 到master，打好tag，根据需要删掉已经完成的feature的branch
