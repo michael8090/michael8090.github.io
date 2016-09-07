@@ -37,3 +37,8 @@ $on-laptop:        800px;
 
 // Import partials from the `minima` theme.
 @import "minima";
+
+blockquote {
+  letter-spacing: 0;
+  font-style: normal;
+}
