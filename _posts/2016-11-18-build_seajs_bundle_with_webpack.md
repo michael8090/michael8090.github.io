@@ -7,24 +7,25 @@ tags: webpack seajs
 
 ## 背景
 
-seajs已经被[正式宣布废弃](https://github.com/seajs/seajs/issues/1605#issuecomment-149220246)了很久了，但我们公司已有的代码都是基于seajs来组织模块的，文件多了之后网络请求明显过多，导致载入性能下降。如果要用webpack之类的工具打包，则需要将seajs模块的写法转化成标准的commonjs或者AMD的形式。在当前已具有较大规模的codebase上整个重写的话工程量太大，成本过高，所以需要一个满足如下两点要求的打包解决方案：
-
-> 1. 打包本身对开发者透明，不需要修改代码
-> 2. 打包能够兼容新的标准，以便让新的模块能够使用标准的ES6的模块系统，逐步将模块系统迁移到ES6
+seajs已经被[正式宣布废弃](https://github.com/seajs/seajs/issues/1605#issuecomment-149220246)了很久了，但我们公司已有的代码都是基于seajs来组织模块的，文件多了之后网络请求明显过多，导致载入性能下降。如果要用webpack之类的工具打包，则需要将seajs模块的写法转化成标准的commonjs或者AMD的形式。在当前已具有较大规模的codebase上整个重写的话工程量太大，成本过高，所以需要一个对使用seajs的开发者透明的打包解决方案。
 
 ## 思路
 
-为了满足上面的第一个要求，我们需要了解seajs与commonjs/AMD用法之间的区别，然后编写babel插件，在编译阶段将seajs模块转换为标准模块，然后交给webpack进行打包。由于是在编译时修改了源代码，该过程对于使用seajs的开发者透明。
+webpack是一个非常好用的打包工具，但它只支持标准的AMD和commonjs模块，于是为了使用webpack我们需要了解seajs与commonjs/AMD用法之间的区别，将seajs模块变成标准模块。而这一步转变应该对开发者透明，所以我们不直接修改源码，而是在编译阶段做代码转换。
 
-而由于我们在编译阶段将模块转换成标准模块，所以上面的解决方案能够满足第二点要求。
+所以我们可以编写babel插件，在编译阶段将seajs模块转换为标准模块，然后交给webpack进行打包。
 
-### seajs与标准模块不一致的地方
+## solution
 
-#### alias
+首先我们要列举出seajs与标准模块不一致的地方，然后为每一种不同编写babel插件，将他们转换成标准写法。
+
+在我们的项目里我遇到了如下4个需要处理的地方。
+
+### alias
 
 在seajs的config里是可以配置模块别名的，这个容易通过配置webpack的alias字段完美解决。
 
-#### 绝对路径
+### 绝对路径
 
 在seajs里可以通过配置根目录来允许在require()里使用绝对路径的，例如require('/static/a'), 而在commonjs里`/static/a`会被当作系统的根目录下的`static/a`，所以需要在编译时将绝对路径转换成相对路径（如`../../static/a`)。
 
@@ -76,7 +77,7 @@ export default ({types: t}) => {
 
 ```
 
-#### define()额外的依赖数组
+### define()额外的依赖数组
 
 在seajs里有一种类似于commonjs的async module的写法:
 
@@ -129,7 +130,7 @@ export default ({types: t}) => {
 };
 ```
 
-#### seajs独有的require.async
+### seajs独有的require.async
 
 seajs里的require.async()函数可以用来做模块的条件加载和懒加载，commonjs和AMD里并没有对应的函数，幸运的是webpack提供了一个相同功能的函数require.ensure()，但两者函数签名并不一致：
 
