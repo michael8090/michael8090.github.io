@@ -5,6 +5,8 @@ date:   2016-11-18 15:43:00 +0800
 tags: webpack seajs
 ---
 
+最近在公司里推广ES6，顺便解决了一下webpack打包seajs的问题，记下来以供参考。
+
 ## 背景
 
 seajs已经被[正式宣布废弃](https://github.com/seajs/seajs/issues/1605#issuecomment-149220246)了很久了，但我们公司已有的代码都是基于seajs来组织模块的，文件多了之后网络请求明显过多，导致载入性能下降。如果要用webpack之类的工具打包，则需要将seajs模块的写法转化成标准的commonjs或者AMD的形式。在当前已具有较大规模的codebase上整个重写的话工程量太大，成本过高，所以需要一个对使用seajs的开发者透明的打包解决方案。
