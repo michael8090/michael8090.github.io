@@ -29,6 +29,8 @@ webpack是一个非常好用的打包工具，但它只支持标准的AMD和comm
 
 ### 绝对路径
 
+*如果使用webpack，可以忽略这个插件，直接用webpack的`resolve.root`即可，见文章末尾的用法*
+
 在seajs里可以通过配置根目录来允许在require()里使用绝对路径的，例如require('/static/a'), 而在commonjs里`/static/a`会被当作系统的根目录下的`static/a`，所以需要在编译时将绝对路径转换成相对路径（如`../../static/a`)。
 
 babel插件（[babel-plugin-root-resolver ](https://www.npmjs.com/package/babel-plugin-root-resolver)）如下：
@@ -78,6 +80,8 @@ export default ({types: t}) => {
 };
 
 ```
+
+它默认当前工作目录(`process.cwd`)作为根目录，拼接处绝对路径的完整路径，并且把绝对路径转换成基于当前文件位置的相对路径。
 
 ### define()额外的依赖数组
 
@@ -131,6 +135,8 @@ export default ({types: t}) => {
     };
 };
 ```
+插件做的事情从上面的注释里能直接看出来。
+
 
 ### seajs独有的require.async
 
@@ -205,6 +211,34 @@ export default ({types: t}) => {
     };
 };
 
+```
+
+## 与webpack一起怎么用
+
+1. 怎么解决seajs的base：配置webpack的`resolve.root`字段，让他等于seajs的base，例如
+
+```js
+webpackConfig = {
+    resolve: {
+        root: [path.resolve('../../src/js/')] // 这个数组里写你定义的seajs的base，注意要用path.resolve获取绝对路径
+    }
+}
+```
+
+2. 怎么使用那几个插件：
+
+    1. `babel-plugin-root-resolver`：使用了上面的那个配置之后，webpack负责帮你找到对应的文件位置，不需要在编译时转换了，于是不需要这个插件
+    2. `babel-plugin-remove-seajs-dependency-array`和`babel-plugin-seajs-async-to-webpack-ensure`: 安装之后，在babel-loader里加上这两个plugin就可以了，例如：
+
+```js
+            loaders: [{
+                exclude: [/node_modules/],
+                test: /\.js$/,
+                loader: `babel-loader?${JSON.stringify({ plugins: [
+                    'remove-seajs-dependency-array',
+                    'seajs-async-to-webpack-ensure'
+                ] })}`,
+            }
 ```
 
 ## 总结
