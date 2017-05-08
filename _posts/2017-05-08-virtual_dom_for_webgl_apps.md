@@ -17,7 +17,7 @@ tags: webgl, virtual dom
 react-three-renderer是一个threejs的react绑定，该库实现了一个react renderer及一组与threejs里底层类相对应的react component，在运行时将react-component的virtual dom更新转化为对threejs object的更新。该库初看起来完美的满足了我的需求，除了如下两点：
 
 1. 性能：根据它自己的[benchmark](http://toxicfork.github.io/react-three-renderer-example/#/benchmarks_rotating_cubes_react)，当方块的数量为3000时，未采用react更新时帧率为30，而采用时仅有15
-2. 多个react renderer不能共存：根据这个[issue](todo)，react是不支持同时使用多个renderer的，也就是说如果我才用了react-three-render，就不能在web app的其他地方使用react了，而我打算在非webgl的也用react
+2. 多个react renderer不能共存：根据这个[issue](todo)，react是不支持同时使用多个renderer的，也就是说如果我采用了react-three-render，就不能在web app的其他地方使用react了，而我打算在非webgl的也用react
 
 所以此路不通。
 
