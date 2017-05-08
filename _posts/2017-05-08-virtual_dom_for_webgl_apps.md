@@ -25,7 +25,7 @@ react-three-renderer是一个threejs的react绑定，该库实现了一个react 
 
 > 一个高度简化/优化的virtual dom实现是可以满足3D webapp的开发的
 
-在接下来的文章里我会详细讲一下我是怎么实现一个自己的react，并且将它应用到一个基于threejs的web app里的。该项目的最终结果是：
+在接下来的文章里我会详细讲一下我是怎么实现一个自己的react，并且将它应用到一个基于threejs的web app里的。该项目的最终结果是：·
 
 1. 才用了与react兼容的virtual dom开发
 2. 在同一个工程里，也可以用react来写普通的DOM UI的开发，代码风格保持一致，降低学习成本
