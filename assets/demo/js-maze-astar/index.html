@@ -1,0 +1,21 @@
+<style>
+    html,
+    body {
+        margin: 0;
+    }
+</style>
+<label style="position: absolute; z-index: 100; background: white">
+    unit size:
+    <select onchange="location.search=event.target.value" id="select"></select>
+</label>
+<script>
+    const select = document.querySelector('#select');
+    for (let i = 0; i < 10; i++) {
+        let option = document.createElement('option');
+        option.value = (i + 1) * 10;
+        option.innerHTML = option.value + 'px';
+        select.appendChild(option)
+    }
+    select.value = parseInt(location.search.slice(1), 10)
+</script>
+<script src="build/index.js" defer></script>
